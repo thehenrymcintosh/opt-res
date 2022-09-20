@@ -1,7 +1,7 @@
 {
-  "name": "option-result",
+  "name": "opt-res",
   "version": "1.0.0",
-  "description": "Option and Result functional error handling types, heavily inspired by Rust.",
+  "description": "Optional value and Result error handling types, heavily inspired by Rust.",
   "main": "lib/index.js",
   "scripts": {
     "lint:fix": "eslint ./src --fix",
