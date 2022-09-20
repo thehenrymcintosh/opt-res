@@ -39,6 +39,18 @@ class _Ok<E, T> implements Result<E, T> {
     return None();
   }
 
+  unwrap (): T {
+    return this.value;
+  }
+
+  unwrapOr (): T {
+    return this.value;
+  }
+
+  unwrapErr (): E {
+    throw new Error('Tried to unwrapErr an Ok!');
+  }
+
   map<U>(map: map<T, U>): Result<E, U> {
     return new _Ok(map(this.value));
   }
@@ -51,18 +63,6 @@ class _Ok<E, T> implements Result<E, T> {
     map: asyncMap<Awaited<T>, Result<E, U>>
   ): Promise<Result<E, U>> {
     return await Promise.resolve(this.value).then(map);
-  }
-
-  unwrap (): T {
-    return this.value;
-  }
-
-  unwrapOr (): T {
-    return this.value;
-  }
-
-  unwrapErr (): E {
-    throw new Error('Tried to unwrapErr an Ok!');
   }
 
   andThen<U>(map: map<T, Result<E, U>>): Result<E, U> {
