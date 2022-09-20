@@ -2,6 +2,8 @@ import { None, Option, Some } from './option';
 
 type map<I, O> = (arg: I) => O;
 
+type FlattenResult<E, T> = T extends Result<(infer E2), (infer T2)> ? Result<E2, T2> : Result<E, T>;
+
 export interface Result<E, T> {
   isErr: () => this is _Err<E, T>
   isOk: () => this is _Ok<E, T>
@@ -15,6 +17,7 @@ export interface Result<E, T> {
   reduce: <U>(errMap: map<E, U>, map: map<T, U>) => U
   contains: <U extends T>(value: U) => this is Result<E, U>
   containsErr: <U extends E>(err: U) => this is Result<U, T>
+  flatten: () => FlattenResult<E, T>
 }
 
 class _Ok<E, T> implements Result<E, T> {
@@ -65,6 +68,12 @@ class _Ok<E, T> implements Result<E, T> {
 
   containsErr<U extends E>(): this is Result<U, T> {
     return false;
+  }
+
+  flatten (): FlattenResult<E, T> {
+    if (this.value instanceof _Ok) return this.value as unknown as FlattenResult<E, T>;
+    if (this.value instanceof _Err) return this.value as unknown as FlattenResult<E, T>;
+    return this as unknown as FlattenResult<E, T>;
   }
 }
 
@@ -117,6 +126,10 @@ class _Err<E, T> implements Result<E, T> {
 
   containsErr<U extends E>(err: U): this is Result<U, T> {
     return this.error === err;
+  }
+
+  flatten (): FlattenResult<E, T> {
+    return this as unknown as FlattenResult<E, T>;
   }
 }
 

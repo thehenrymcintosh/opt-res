@@ -66,6 +66,14 @@ describe('Result', () => {
     it('strict equal contains', () => {
       expect(result.containsErr(new Error('anything'))).toEqual(false);
     });
+
+    it('flattens a layer with each call', () => {
+      const val = 'flattened!';
+      const result1 = Ok(Ok(val));
+      const resultErr = Ok(Err(val));
+      expect(result1.flatten().unwrap()).toEqual(val);
+      expect(resultErr.flatten().unwrapErr()).toEqual(val);
+    });
   });
 
   describe('Err', () => {
@@ -129,6 +137,14 @@ describe('Result', () => {
     it('never contains', () => {
       expect(result.containsErr(error)).toEqual(true);
       expect(result.containsErr(new Error('something else'))).toEqual(false);
+    });
+
+    it('doesnt flatten the error side', () => {
+      const val = 'flattened!';
+      const result1 = Err(Ok(val));
+      const resultErr = Err(Err(val));
+      expect(result1.flatten().isErr()).toEqual(true);
+      expect(resultErr.flatten().isErr()).toEqual(true);
     });
   });
 });
