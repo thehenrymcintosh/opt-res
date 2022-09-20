@@ -13,6 +13,8 @@ export interface Result<E, T> {
   unwrapErr: () => E
   andThen: <U>(map: map<T, Result<E, U>>) => Result<E, U>
   reduce: <U>(errMap: map<E, U>, map: map<T, U>) => U
+  contains: <U extends T>(value: U) => this is Result<E, U>
+  containsErr: <U extends E>(err: U) => this is Result<U, T>
 }
 
 class _Ok<E, T> implements Result<E, T> {
@@ -55,6 +57,14 @@ class _Ok<E, T> implements Result<E, T> {
 
   reduce<U>(_errMap: map<E, U>, map: map<T, U>): U {
     return map(this.value);
+  }
+
+  contains<U extends T>(value: U): this is Result<E, U> {
+    return this.value === value;
+  }
+
+  containsErr<U extends E>(): this is Result<U, T> {
+    return false;
   }
 }
 
@@ -99,6 +109,14 @@ class _Err<E, T> implements Result<E, T> {
 
   reduce<U>(errMap: map<E, U>): U {
     return errMap(this.error);
+  }
+
+  contains<U extends T>(): this is Result<E, U> {
+    return false;
+  }
+
+  containsErr<U extends E>(err: U): this is Result<U, T> {
+    return this.error === err;
   }
 }
 

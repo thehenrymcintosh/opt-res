@@ -57,6 +57,15 @@ describe('Result', () => {
       };
       expect(result.reduce(throwingFn, map)).toEqual(val2);
     });
+
+    it('strict equal contains', () => {
+      expect(result.contains(value)).toEqual(true);
+      expect(result.contains('something else')).toEqual(false);
+    });
+
+    it('strict equal contains', () => {
+      expect(result.containsErr(new Error('anything'))).toEqual(false);
+    });
   });
 
   describe('Err', () => {
@@ -111,6 +120,15 @@ describe('Result', () => {
         return value;
       };
       expect(result.reduce(map, throwingFn)).toEqual(value);
+    });
+
+    it('never contains', () => {
+      expect(result.contains(value)).toEqual(false);
+    });
+
+    it('never contains', () => {
+      expect(result.containsErr(error)).toEqual(true);
+      expect(result.containsErr(new Error('something else'))).toEqual(false);
     });
   });
 });
