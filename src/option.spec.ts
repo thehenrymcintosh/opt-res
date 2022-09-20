@@ -3,8 +3,9 @@ import { None, Some } from './option';
 describe('Option', () => {
   describe('Some', () => {
     const value = 'value';
+    const valueb = 'something else!';
     const option = Some(value);
-    const optionb = Some('something else!');
+    const optionb = Some(valueb);
 
     it('isSome should be true', () => {
       expect(option.isSome()).toBe(true);
@@ -43,6 +44,10 @@ describe('Option', () => {
 
     it('returns self instead of optionb on or', () => {
       expect(option.or(optionb).unwrap()).toEqual(value);
+    });
+
+    it('returns optionb on and', () => {
+      expect(option.and(optionb).unwrap()).toEqual(valueb);
     });
 
     it('converts to Ok with value', () => {
@@ -90,6 +95,10 @@ describe('Option', () => {
 
     it('returns optionb on or', () => {
       expect(option.or(optionb).unwrap()).toEqual(value);
+    });
+
+    it('returns optionb on and', () => {
+      expect(option.and(optionb).isNone()).toEqual(true);
     });
 
     it('converts to Err on okOr', () => {
