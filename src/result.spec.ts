@@ -63,7 +63,7 @@ describe('Result', () => {
       expect(result.contains('something else')).toEqual(false);
     });
 
-    it('strict equal contains', () => {
+    it('never containsErr', () => {
       expect(result.containsErr(new Error('anything'))).toEqual(false);
     });
 
@@ -73,6 +73,27 @@ describe('Result', () => {
       const resultErr = Ok(Err(val));
       expect(result1.flatten().unwrap()).toEqual(val);
       expect(resultErr.flatten().unwrapErr()).toEqual(val);
+    });
+
+    it('Can unwrap or else', () => {
+      const output = Ok(value).unwrapOrElse(throwingFn);
+      expect(output).toEqual(value);
+    });
+
+    it('iter contains value', () => {
+      const arr = Ok(value).iter();
+      expect(arr).toHaveLength(1);
+      expect(arr[0]).toEqual(value);
+    });
+
+    it('or returns current result', () => {
+      const result = Ok(value).or(Ok('something else'));
+      expect(result.unwrap()).toEqual(value);
+    });
+
+    it('orElse returns current result', () => {
+      const result = Ok(value).orElse((val) => Ok(`${val}-a`));
+      expect(result.unwrap()).toEqual(value);
     });
   });
 
@@ -134,7 +155,7 @@ describe('Result', () => {
       expect(result.contains(value)).toEqual(false);
     });
 
-    it('never contains', () => {
+    it('strict equal containsErr', () => {
       expect(result.containsErr(error)).toEqual(true);
       expect(result.containsErr(new Error('something else'))).toEqual(false);
     });
@@ -145,6 +166,25 @@ describe('Result', () => {
       const resultErr = Err(Err(val));
       expect(result1.flatten().isErr()).toEqual(true);
       expect(resultErr.flatten().isErr()).toEqual(true);
+    });
+
+    it('Can unwrap or else', () => {
+      const output = Err(value).unwrapOrElse((val) => `${val}-a`);
+      expect(output).toEqual(`${value}-a`);
+    });
+
+    it('iter is empty', () => {
+      expect(Err(value).iter()).toHaveLength(0);
+    });
+
+    it('or returns passed result', () => {
+      const result = Err(error).or(Ok(value));
+      expect(result.unwrap()).toEqual(value);
+    });
+
+    it('orElse calls mapped result', () => {
+      const result = Err(value).orElse((val) => Ok(`${val}-a`));
+      expect(result.unwrap()).toEqual(`${value}-a`);
     });
   });
 });
