@@ -55,6 +55,26 @@ describe('Option', () => {
       expect(result.isOk()).toEqual(true);
       expect(result.unwrap()).toEqual(value);
     });
+
+    it('can check if it contains a value', () => {
+      expect(option.contains(value)).toEqual(true);
+      expect(option.contains(valueb)).toEqual(false);
+    });
+
+    it('can flatten options', () => {
+      const option1 = Some(value);
+      const option2 = Some(option1);
+      expect(option2.flatten().flatten().unwrap()).toEqual(value);
+    });
+
+    it('isSomeAnd is called', () => {
+      expect(option.isSomeAnd((val) => val === value)).toEqual(true);
+      expect(option.isSomeAnd((val) => val !== value)).toEqual(false);
+    });
+
+    it('iter retuns array with val', () => {
+      expect(option.iter()).toContain(value);
+    });
   });
 
   describe('None', () => {
@@ -106,6 +126,24 @@ describe('Option', () => {
       const result = option.okOr(error);
       expect(result.isErr()).toEqual(true);
       expect(result.unwrapErr()).toEqual(error);
+    });
+
+    it('can check if it contains a value', () => {
+      expect(option.contains(value)).toEqual(false);
+    });
+
+    it('can flatten options', () => {
+      const option1 = None();
+      const option2 = Some(option1);
+      expect(option2.flatten().flatten().isNone()).toEqual(true);
+    });
+
+    it('isSomeAnd is not called', () => {
+      expect(option.isSomeAnd(throwingFn)).toEqual(false);
+    });
+
+    it('iter retuns empty array', () => {
+      expect(option.iter()).toHaveLength(0);
     });
   });
 });
