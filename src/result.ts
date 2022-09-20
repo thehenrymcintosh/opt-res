@@ -98,18 +98,6 @@ class _Err<E, T> implements Result<E, T> {
     return Some(this.error);
   }
 
-  map<U>(): Result<E, U> {
-    return this as unknown as Result<E, U>;
-  }
-
-  asyncMap<U>(): Result<E, Promise<U>> {
-    return this as unknown as Result<E, Promise<U>>;
-  }
-
-  async asyncAndThen<U>(): Promise<Result<E, U>> {
-    return this as unknown as Result<E, U>;
-  }
-
   unwrap (): T {
     throw new Error('Tried to unwrap an Err!');
   }
@@ -122,7 +110,19 @@ class _Err<E, T> implements Result<E, T> {
     return this.error;
   }
 
+  map<U>(): Result<E, U> {
+    return this as unknown as Result<E, U>;
+  }
+
+  asyncMap<U>(): Result<E, Promise<U>> {
+    return this as unknown as Result<E, Promise<U>>;
+  }
+
   andThen<U>(): Result<E, U> {
+    return this as unknown as Result<E, U>;
+  }
+
+  async asyncAndThen<U>(): Promise<Result<E, U>> {
     return this as unknown as Result<E, U>;
   }
 
