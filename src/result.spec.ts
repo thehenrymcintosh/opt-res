@@ -38,10 +38,16 @@ describe('Result', () => {
       expect(() => result.unwrapErr()).toThrowError('Tried to unwrapErr an Ok!');
     });
 
-    it('can map sync or async', () => {
+    it('can map', () => {
       const resolved = result
         .map(val => `${val}-a`);
       expect(resolved.unwrap()).toEqual(`${value}-a`);
+    });
+
+    it('maps errors', () => {
+      const resolved = result
+        .mapErr(throwingFn);
+      expect(resolved.unwrap()).toEqual(value);
     });
 
     it('can chain andThens sync or async', () => {
@@ -71,7 +77,7 @@ describe('Result', () => {
       const val = 'flattened!';
       const result1 = Ok(Ok(val));
       const resultErr = Ok(Err(val));
-      expect(result1.flatten().unwrap()).toEqual(val);
+      expect(result1.flatten().flatten().unwrap()).toEqual(val);
       expect(resultErr.flatten().unwrapErr()).toEqual(val);
     });
 
@@ -92,14 +98,20 @@ describe('Result', () => {
     });
 
     it('orElse returns current result', () => {
-      const result = Ok(value).orElse((val) => Ok(`${val}-a`));
+      const result = Ok<string, string>(value).orElse((val) => Ok(`${val}-a`));
+      expect(result.unwrap()).toEqual(value);
+    });
+
+    it('and returns passed result', () => {
+      const result = Ok('random').and(Ok(value));
       expect(result.unwrap()).toEqual(value);
     });
   });
 
   describe('Err', () => {
     const value = 'value';
-    const error = new Error('The princess is in another castle!');
+    const message = 'The princess is in another castle!';
+    const error = new Error(message);
     const result = Err<Error, string>(error);
 
     it('is err', () => {
@@ -131,10 +143,16 @@ describe('Result', () => {
       expect(result.unwrapErr()).toEqual(error);
     });
 
-    it('wont map sync or async', () => {
+    it('wont map', () => {
       const resolved = result
         .map(val => `${val}-a`);
       expect(resolved.unwrapErr()).toEqual(error);
+    });
+
+    it('maps errors', () => {
+      const resolved = result
+        .mapErr(err => `${err.message}-a`);
+      expect(resolved.unwrapErr()).toEqual(`${message}-a`);
     });
 
     it('wont chain andThens sync or async', () => {
@@ -185,6 +203,11 @@ describe('Result', () => {
     it('orElse calls mapped result', () => {
       const result = Err(value).orElse((val) => Ok(`${val}-a`));
       expect(result.unwrap()).toEqual(`${value}-a`);
+    });
+
+    it('and returns error', () => {
+      const result = Err(value).and(Ok('random'));
+      expect(result.unwrapErr()).toEqual(value);
     });
   });
 });
