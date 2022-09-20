@@ -47,7 +47,7 @@ describe('Option', () => {
 
     it('converts to Ok with value', () => {
       const result = option.okOr(new Error('Fail'));
-      expect(result.isOk()).toEqual(value);
+      expect(result.isOk()).toEqual(true);
       expect(result.unwrap()).toEqual(value);
     });
   });

@@ -1,7 +1,6 @@
 import { None, Option, Some } from './option';
 
 type map<I, O> = (arg: I) => O;
-type asyncMap<I, O> = (arg: I) => Promise<O> | O;
 
 export interface Result<E, T> {
   isErr: () => this is _Err<E, T>
@@ -9,15 +8,10 @@ export interface Result<E, T> {
   ok: () => Option<T>
   err: () => Option<E>
   map: <U>(map: map<T, U>) => Result<E, U>
-  asyncMap: <U>(map: asyncMap<Awaited<T>, U>) => Result<E, Promise<U>>
   unwrap: () => T
   unwrapOr: (arg: T) => T
   unwrapErr: () => E
   andThen: <U>(map: map<T, Result<E, U>>) => Result<E, U>
-  resolve: () => Promise<Result<E, Awaited<T>>>
-  asyncAndThen: <U>(
-    map: asyncMap<Awaited<T>, Result<E, U>>
-  ) => Promise<Result<E, U>>
   reduce: <U>(errMap: map<E, U>, map: map<T, U>) => U
 }
 
@@ -55,23 +49,8 @@ class _Ok<E, T> implements Result<E, T> {
     return new _Ok(map(this.value));
   }
 
-  asyncMap<U>(map: asyncMap<Awaited<T>, U>): Result<E, Promise<U>> {
-    return new _Ok(Promise.resolve(this.value).then(map));
-  }
-
-  async asyncAndThen<U>(
-    map: asyncMap<Awaited<T>, Result<E, U>>
-  ): Promise<Result<E, U>> {
-    return await Promise.resolve(this.value).then(map);
-  }
-
   andThen<U>(map: map<T, Result<E, U>>): Result<E, U> {
     return map(this.value);
-  }
-
-  async resolve (): Promise<Result<E, Awaited<T>>> {
-    const value = await this.value;
-    return new _Ok(value);
   }
 
   reduce<U>(_errMap: map<E, U>, map: map<T, U>): U {
@@ -114,20 +93,8 @@ class _Err<E, T> implements Result<E, T> {
     return this as unknown as Result<E, U>;
   }
 
-  asyncMap<U>(): Result<E, Promise<U>> {
-    return this as unknown as Result<E, Promise<U>>;
-  }
-
   andThen<U>(): Result<E, U> {
     return this as unknown as Result<E, U>;
-  }
-
-  async asyncAndThen<U>(): Promise<Result<E, U>> {
-    return this as unknown as Result<E, U>;
-  }
-
-  async resolve (): Promise<Result<E, Awaited<T>>> {
-    return this as unknown as Result<E, Awaited<T>>;
   }
 
   reduce<U>(errMap: map<E, U>): U {

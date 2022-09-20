@@ -38,20 +38,16 @@ describe('Result', () => {
       expect(() => result.unwrapErr()).toThrowError('Tried to unwrapErr an Ok!');
     });
 
-    it('can map sync or async', async () => {
-      const resolved = await result
-        .map(val => `${val}-a`)
-        .asyncMap(async val => `${val}-b`)
-        .asyncMap(async val => `${val}-c`)
-        .resolve();
-      expect(resolved.unwrap()).toEqual(`${value}-a-b-c`);
+    it('can map sync or async', () => {
+      const resolved = result
+        .map(val => `${val}-a`);
+      expect(resolved.unwrap()).toEqual(`${value}-a`);
     });
 
-    it('can chain andThens sync or async', async () => {
-      const resolved = await result
-        .andThen(val => Ok(`${val}-a`))
-        .asyncAndThen(async val => Ok(`${val}-b`));
-      expect(resolved.unwrap()).toEqual(`${value}-a-b`);
+    it('can chain andThens sync or async', () => {
+      const resolved = result
+        .andThen(val => Ok(`${val}-a`));
+      expect(resolved.unwrap()).toEqual(`${value}-a`);
     });
 
     it('can reduce', () => {
@@ -97,19 +93,15 @@ describe('Result', () => {
       expect(result.unwrapErr()).toEqual(error);
     });
 
-    it('wont map sync or async', async () => {
-      const resolved = await result
-        .map(val => `${val}-a`)
-        .asyncMap(async val => `${val}-b`)
-        .asyncMap(async val => `${val}-c`)
-        .resolve();
+    it('wont map sync or async', () => {
+      const resolved = result
+        .map(val => `${val}-a`);
       expect(resolved.unwrapErr()).toEqual(error);
     });
 
-    it('wont chain andThens sync or async', async () => {
-      const resolved = await result
-        .andThen(val => Ok(`${val}-a`))
-        .asyncAndThen(async val => Ok(`${val}-b`));
+    it('wont chain andThens sync or async', () => {
+      const resolved = result
+        .andThen(val => Ok(`${val}-a`));
       expect(resolved.unwrapErr()).toEqual(error);
     });
 
