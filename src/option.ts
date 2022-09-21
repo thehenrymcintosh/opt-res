@@ -5,7 +5,7 @@ type map<I, O> = (arg: I) => O;
 type FlattenOption<T> = T extends Option<(infer T2)> ? Option<T2> : Option<T>;
 
 export interface Option<T> {
-  and: (opt: Option<T>) => Option<T>
+  and: (optb: Option<T>) => Option<T>
   andThen: <U>(map: map<T, Option<U>>) => Option<U>
   contains: <T2 extends T>(value: T2) => this is Option<T2>
   filter: (filter: filter<T>) => Option<T>
@@ -16,9 +16,9 @@ export interface Option<T> {
   iter: () => T[]
   map: <U>(map: map<T, U>) => Option<U>
   okOr: <E>(err: E) => Result<E, T>
-  or: (opt: Option<T>) => Option<T>
+  or: (optb: Option<T>) => Option<T>
   unwrap: () => T
-  unwrapOr: (arg: T) => T
+  unwrapOr: (fallback: T) => T
 }
 
 class _Some<T> implements Option<T> {
