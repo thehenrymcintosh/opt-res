@@ -94,8 +94,95 @@ Returns the option if it contains a value, otherwise returns optb.
 ### `unwrap: () => T`
 Returns the contained `Some` value, consuming the self value.
 
-Panics if the self value equals `None`.
+Panics if the self value equals `None`. Because this function may panic, its use is generally discouraged.
 
 ---
 ### `unwrapOr: (fallback: T) => T`
 Returns the contained `Some` value or a provided default.
+
+---
+
+
+## Result Type
+
+### `and: (res: Result<E, T>) => Result<E, T>`
+Returns res if the result is `Ok`, otherwise returns the `Err` value of self.
+
+---
+### `andThen: <T2>(map: map<T, Result<E, T2>>) => Result<E, T2>`
+Calls `map` if the result is `Ok`, otherwise returns the `Err` value of self.
+
+---
+### `contains: <T2 extends T>(value: T2) => this is Result<E, T2>`
+Returns `true` if the result is an `Ok` value containing the given value. Uses strict equals.
+
+---
+### `containsErr: <E2 extends E>(err: E2) => this is Result<E2, T>`
+Returns `true` if the result is an `Err` value containing the given value. Uses strict equals.
+
+---
+### `err: () => Option<E>`
+Converts from `Result<E, T>` to `Option<E>`.
+
+---
+### `flatten: () => FlattenResult<E, T>`
+Converts from `Result<E, Result<E, T>>` to `Result<E, T>`.
+
+---
+### `isErr: () => this is _Err<E, T>`
+Returns `true` if the result is `Err`.
+
+---
+### `isOk: () => this is _Ok<E, T>`
+Returns `true` if the result is `Ok`.
+
+---
+### `iter: () => T[]`
+Converts the result to an array
+
+- Array has length 1 and contains inner value if the result is a `Ok`.
+- Array is empty if the result is a `Err` value.
+
+---
+### `map: <T2>(map: map<T, T2>) => Result<E, T2>`
+Maps a `Result<E, T>` to `Result<E, T2>` by applying a function to a contained `Ok` value, leaving an `Err` value untouched.
+
+---
+### `mapErr: <E2>(map: map<E, E2>) => Result<E2, T>`
+Maps a `Result<E, T>` to `Result<E2, T>` by applying a function to a contained Err value, leaving an Ok value untouched.
+
+---
+### `ok: () => Option<T>`
+Converts from `Result<E, T>` to `Option<T>`.
+
+---
+### `or: (result: Result<E, T>) => Result<E, T>`
+Returns res if the result is `Err`, otherwise returns the `Ok` value of self.
+
+---
+### `orElse: (map: map<E, Result<E, T>>) => Result<E, T>`
+Calls `map` if the result is `Err`, otherwise returns the `Ok` value of self.
+
+---
+### `reduce: <O>(errMap: map<E, O>, map: map<T, O>) => O`
+Calls `map` on the inner value of an `Ok`, or `errMap` on the inner value of an `Err`. `map` and `errMap` should produce the same output type.
+
+---
+### `unwrap: () => T`
+Returns the contained `Ok` value, consuming the self value.
+
+Panics if the self value equals `Err`. Because this function may panic, its use is generally discouraged.
+
+---
+### `unwrapErr: () => E`
+Returns the contained `Err` value, consuming the self value.
+
+Panics if the self value equals `Ok`. Because this function may panic, its use is generally discouraged.
+
+---
+### `unwrapOr: (arg: T) => T`
+Returns the contained `Ok` value or a provided default.
+
+---
+### `unwrapOrElse: (map: map<E, T>) => T`
+Returns the contained `Ok` value or computes it by calling `map` on the inner value of the `Err`.
