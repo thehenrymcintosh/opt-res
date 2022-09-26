@@ -23,8 +23,11 @@
 <pre align="center">npm i opt-res</pre>
 <hr>
 
-Handle optional data with the Option type, and stop using exceptions by functionally handling errors with the Result type. 
-This library is heavily inspired by the excellent types in Rustlang. 
+Replace null checks with the Option type, and elegantly handle optional data. 
+
+Replace exceptions with functional error handling using the Result type. 
+
+This library is heavily inspired by the excellent Option and Result enums from Rustlang. 
 
 
 ## Maybe Type
