@@ -2,6 +2,13 @@
   "name": "opt-res",
   "version": "1.0.0",
   "description": "Optional value and Result error handling types, heavily inspired by Rust.",
+  "keywords": ["rust", "rustlang", "option", "result", "enum", "functional", "error", "error handling"],
+  "homepage": "https://github.com/thehenrymcintosh/opt-res/blob/main/README.md",
+  "bugs": {
+    "url" : "https://github.com/thehenrymcintosh/opt-res/issues"
+  },
+  "author": "Henry McIntosh",
+  "license": "MIT",
   "main": "lib/index.js",
   "scripts": {
     "lint:fix": "eslint ./src --fix",
@@ -10,8 +17,6 @@
     "build": "yarn clean && webpack",
     "test": "jest"
   },
-  "author": "Henry McIntosh",
-  "license": "MIT",
   "types": "./lib/index.d.ts",
   "devDependencies": {
     "@types/jest": "^29.0.3",
