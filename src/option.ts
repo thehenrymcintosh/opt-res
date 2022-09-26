@@ -38,7 +38,7 @@ class _Some<T> implements Option<T> {
 
   filter (filter: filter<T>): Option<T> {
     if (filter(this.value)) return this;
-    return None();
+    return None;
   }
 
   flatten (): FlattenOption<T> {
@@ -144,4 +144,4 @@ class _None<T> implements Option<T> {
 
 export const Some = <T>(arg: T): Option<T> => new _Some(arg);
 
-export const None = <T>(): Option<T> => new _None();
+export const None = new _None() as Option<any>;

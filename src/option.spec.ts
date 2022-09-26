@@ -34,7 +34,7 @@ describe('Option', () => {
 
     it('andThen can chain options', () => {
       expect(option.andThen(val => Some({ val })).unwrap()).toEqual({ val: value });
-      expect(option.andThen(() => None()).isSome()).toEqual(false);
+      expect(option.andThen(() => None).isSome()).toEqual(false);
     });
 
     it('can filter properly', () => {
@@ -79,7 +79,7 @@ describe('Option', () => {
 
   describe('None', () => {
     const value = 'value';
-    const option = None();
+    const option = None;
     const optionb = Some(value);
 
     const throwingFn = (): never => {
@@ -133,7 +133,7 @@ describe('Option', () => {
     });
 
     it('can flatten options', () => {
-      const option1 = None();
+      const option1 = None;
       const option2 = Some(option1);
       expect(option2.flatten().flatten().isNone()).toEqual(true);
     });

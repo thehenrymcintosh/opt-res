@@ -46,7 +46,7 @@ class _Ok<E, T> implements Result<E, T> {
   }
 
   err (): Option<E> {
-    return None();
+    return None;
   }
 
   flatten (): FlattenResult<E, T> {
@@ -157,7 +157,7 @@ class _Err<E, T> implements Result<E, T> {
   }
 
   ok (): Option<T> {
-    return None();
+    return None;
   }
 
   or (result: Result<E, T>): Result<E, T> {
