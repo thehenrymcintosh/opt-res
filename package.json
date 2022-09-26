@@ -1,11 +1,20 @@
 {
   "name": "opt-res",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Optional value and Result error handling types, heavily inspired by Rust.",
-  "keywords": ["rust", "rustlang", "option", "result", "enum", "functional", "error", "error handling"],
+  "keywords": [
+    "rust",
+    "rustlang",
+    "option",
+    "result",
+    "enum",
+    "functional",
+    "error",
+    "error handling"
+  ],
   "homepage": "https://github.com/thehenrymcintosh/opt-res/blob/main/README.md",
   "bugs": {
-    "url" : "https://github.com/thehenrymcintosh/opt-res/issues"
+    "url": "https://github.com/thehenrymcintosh/opt-res/issues"
   },
   "author": "Henry McIntosh",
   "license": "MIT",
