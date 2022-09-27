@@ -29,7 +29,7 @@ Replace exceptions with functional error handling using the Result type.
 
 This library is heavily inspired by the excellent Option and Result enums from Rustlang.
 
-## Maybe
+## Option
 
 ### `and: (optb: Option<T>) => Option<T>`
 Returns `None` if the option is `None`, otherwise returns optb.
