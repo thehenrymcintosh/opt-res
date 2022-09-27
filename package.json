@@ -1,6 +1,6 @@
 {
   "name": "opt-res",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Optional value and Result error handling types, heavily inspired by Rust.",
   "keywords": [
     "rust",
