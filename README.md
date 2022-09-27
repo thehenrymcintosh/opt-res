@@ -27,10 +27,9 @@ Replace null checks with the Option type, and elegantly handle optional data.
 
 Replace exceptions with functional error handling using the Result type. 
 
-This library is heavily inspired by the excellent Option and Result enums from Rustlang. 
+This library is heavily inspired by the excellent Option and Result enums from Rustlang.
 
-
-## Maybe Type
+## Maybe
 
 ### `and: (optb: Option<T>) => Option<T>`
 Returns `None` if the option is `None`, otherwise returns optb.

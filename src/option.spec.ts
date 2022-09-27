@@ -1,4 +1,4 @@
-import { None, Some } from './option';
+import { None, Opt, Some } from './option';
 
 describe('Option', () => {
   describe('Some', () => {
@@ -144,6 +144,24 @@ describe('Option', () => {
 
     it('iter retuns empty array', () => {
       expect(option.iter()).toHaveLength(0);
+    });
+  });
+
+  describe('Opt', () => {
+    it('Should create from undefined', () => {
+      expect(Opt.fromUndefined(undefined).isNone()).toBe(true);
+      expect(Opt.fromUndefined('string').isSome()).toBe(true);
+    });
+
+    it('Should create from null', () => {
+      expect(Opt.fromNull(null).isNone()).toBe(true);
+      expect(Opt.fromNull(undefined).isSome()).toBe(true);
+      expect(Opt.fromNull('string').isSome()).toBe(true);
+    });
+
+    it('Should create from falsy', () => {
+      expect(Opt.fromFalsy('').isNone()).toBe(true);
+      expect(Opt.fromFalsy([]).isSome()).toBe(true);
     });
   });
 });

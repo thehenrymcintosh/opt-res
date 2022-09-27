@@ -192,3 +192,22 @@ class _Err<E, T> implements Result<E, T> {
 export const Ok = <E, T>(value: T): Result<E, T> => new _Ok(value);
 
 export const Err = <E, T>(error: E): Result<E, T> => new _Err(error);
+
+export const Res = {
+  fromCallback: <E, T>(err: E | undefined | null, data: T): Result<E, T> => {
+    if (typeof err !== 'undefined' && err !== null) return Err(err);
+    return Ok(data);
+  },
+  fromPromise: async <E, T>(promise: Promise<T>): Promise<Result<E, T>> => {
+    return await promise
+      .then(Ok<E, T>)
+      .catch(Err<E, T>);
+  },
+  fromCatch: <E, T>(fn: () => T): Result<E, T> => {
+    try {
+      return Ok(fn());
+    } catch (err) {
+      return Err(err);
+    }
+  }
+};

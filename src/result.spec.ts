@@ -1,4 +1,4 @@
-import { Err, Ok } from './result';
+import { Err, Ok, Res } from './result';
 const throwingFn = (): never => {
   throw new Error("Shouldn't call this");
 };
@@ -208,6 +208,46 @@ describe('Result', () => {
     it('and returns error', () => {
       const result = Err(value).and(Ok('random'));
       expect(result.unwrapErr()).toEqual(value);
+    });
+  });
+
+  describe('Res', () => {
+    it('from resolved promise', async () => {
+      const value = 'text';
+      const result = await Res.fromPromise(Promise.resolve(value));
+      expect(result.unwrap()).toEqual(value);
+    });
+
+    it('from rejected promise', async () => {
+      const message = 'something bad happened!';
+      const result = await Res.fromPromise(Promise.reject(new Error(message)));
+      expect(result.unwrapErr()).toEqual(new Error(message));
+    });
+
+    it('from function that throws error', () => {
+      const message = 'something bad happened!';
+      const result = Res.fromCatch(() => { throw new Error(message); });
+      expect(result.unwrapErr()).toEqual(new Error(message));
+    });
+
+    it('from function that succeeds', () => {
+      const message = 'something bad happened!';
+      const result = Res.fromCatch(() => message);
+      expect(result.unwrap()).toEqual(message);
+    });
+
+    it('from failed callback format', () => {
+      const err = new Error('something went wrong!');
+      const data = null;
+      const result = Res.fromCallback(err, data);
+      expect(result.unwrapErr()).toEqual(err);
+    });
+
+    it('from success callback format', () => {
+      const err = null;
+      const data = 'text';
+      const result = Res.fromCallback(err, data);
+      expect(result.unwrap()).toEqual(data);
     });
   });
 });

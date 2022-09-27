@@ -145,3 +145,18 @@ class _None<T> implements Option<T> {
 export const Some = <T>(arg: T): Option<T> => new _Some(arg);
 
 export const None = new _None() as Option<any>;
+
+export const Opt = {
+  fromUndefined: <T>(value: T | undefined): Option<T> => {
+    if (typeof value === 'undefined') return None;
+    return Some(value);
+  },
+  fromNull: <T>(value: T | null): Option<T> => {
+    if (value === null) return None;
+    return Some(value);
+  },
+  fromFalsy: <T>(value: T): Option<T> => {
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+    return value ? Some(value) : None;
+  }
+};
